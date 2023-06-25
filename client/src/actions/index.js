@@ -20,8 +20,14 @@ export const signOut = ( )=>{
 }
 export const createStream = formValues=> async (dispatch,getState)=>{
     const {userEmail}=getState().auth;
+    const {token}=getState().auth;
+
     try{
-        const response = await  streams.post('/streams',{...formValues,userEmail});
+        const response = await  streams.post('/streams',{...formValues,userEmail},{
+            headers: {
+                'Authorization': `Bearer ${token}`
+              }
+        });
         dispatch({type : CREATE_STREAM,payload : response.data});
         history.push('/')       // navigation
     }catch(error){
@@ -50,23 +56,36 @@ export const fetchStream = (id)=>async dispatch =>{
     //we have to only get data[0]
     dispatch({type:FETCH_STREAM,payload:response.data[0]})
 }
-export const editStream = (id,formValues)=>async dispatch=>{
-    const response = await streams.patch(`streams/${id}`,formValues)
+export const editStream = (id,formValues)=>async (dispatch,getState)=>{
+    const {token}=getState().auth;
+    const response = await streams.patch(`streams/${id}`,formValues,{
+        headers: {
+            'Authorization': `Bearer ${token}`
+          }
+    })
    
     dispatch({type:EDIT_STREAM,payload:response.data})
     history.push('/')
 
 }
-export const deleteStream = (id)=> async dispatch =>{
-    await streams.delete(`streams/${id}`)
+export const deleteStream = (id)=> async (dispatch,getState) =>{
+    const {token}=getState().auth;
+
+    await streams.delete(`streams/${id}`,
+    {
+        headers: {
+            'Authorization': `Bearer ${token}`
+          }
+    })
     dispatch({type:DELETE_STREAM,payload:id})
     history.push('/')
 }
 
 export const login = (username,password)=> async dispatch =>{
     try {
-        await auth.post(`login`, { username, password });
-        dispatch({ type: LOGIN_SUCCESS, payload: username });
+         const response = await auth.post(`login`, { username, password });
+         
+        dispatch({ type: LOGIN_SUCCESS, payload: {username : username , token : response.data.token} });
         history.push('/');
       } catch (error) {
         

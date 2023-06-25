@@ -37,13 +37,14 @@ app.use('/chat', (req, res, next) => {
 
 // Define your routes and controllers
 app.get('/streams', GetStreamsController);
-app.post('/streams', AddStreamsController);
+protectedPath.post('/streams', AddStreamsController);
 app.get('/streams/:streamid', GetStreamController);
-app.delete('/streams/:streamid', DeleteStreamsController);
-app.patch('/streams/:streamid', EditStreamsController);
+protectedPath.delete('/streams/:streamid', DeleteStreamsController);
+protectedPath.patch('/streams/:streamid', EditStreamsController);
 app.post('/login', LoginController);
 app.post('/register', RegisterController);
 
+app.use('/', protectedPath)
 // Handle socket connections for /chat using a controller
 app.use('/chat', ChatController);
 io.on('connection', (socket) => {

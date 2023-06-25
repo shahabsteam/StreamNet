@@ -27,11 +27,12 @@ if(persistedState){
       case SIGN_IN:
         return { ...state, isSignedIn: true, userEmail: action.payload };
       case SIGN_OUT:
-        return { ...state, isSignedIn: false, userEmail: null };
+        return { ...state, isSignedIn: false, userEmail: null , token : null };
       case LOGIN_FAILURE:
         return { ...state, isSignedIn: false, userEmail: null, error: action.payload };
       case LOGIN_SUCCESS:
-        return { ...state, isSignedIn: true, userEmail: action.payload };
+
+        return { ...state, isSignedIn: true, userEmail: action.payload.username , token : action.payload.token ,error: null};
       case REGISTER_SUCCESS:
         return { ...state, isSignedIn: false, userEmail: null, success: action.payload, error: null };
       case REGISTER_FAILURE:
