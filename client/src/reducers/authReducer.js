@@ -17,8 +17,10 @@ import {
   
   // Load the initial state from localStorage if available
   var persistedState = JSON.parse(localStorage.getItem('authState'));
-  persistedState.error = null;
-  persistedState.success = null;
+if(persistedState){
+  persistedState.error = persistedState.error || null;
+  persistedState.success = persistedState.success || null;
+}
   
   const AuthReducer =  (state = persistedState || INITIAL_STATE, action) => {
     switch (action.type) {

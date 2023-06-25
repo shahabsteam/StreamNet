@@ -52,17 +52,19 @@ io.on('connection', (socket) => {
   socket.on('chatMessage', (message) => {
     // Handle chat message
     console.log(message)
-    io.emit('message', message); // Emit the message to all connected clients
-  });
-
-  socket.on('disconnect', () => {
-    console.log('A user disconnected from the chat');
+    io.to(socket.room).emit('message', message);
   });
 
   socket.on('join', ({ room }) => {
     socket.join(room); // Join the specified room
     console.log(`User joined room: ${room}`);
+    socket.room = room;
   });
+  socket.on('disconnect', () => {
+    console.log('A user disconnected from the chat');
+  });
+
+
 });
 
 

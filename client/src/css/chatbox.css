@@ -1,0 +1,14 @@
+.chat-box {
+  height: 30vh; 
+  overflow: auto;
+}
+
+.chat-input-container {
+  width : 100%;
+}
+
+
+.chat-input {
+  margin: 0;
+  padding: 0;
+}
